@@ -1,1 +1,43 @@
+name: My AI Agent
 
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "المهمة التي تريد من الوكيل تنفيذها"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: تحميل المشروع
+        uses: actions/checkout@v6
+
+      - name: إعداد Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: تشغيل الوكيل
+        env:
+          TASK: ${{ inputs.task }}
+        run: |
+          echo "================================="
+          echo "🤖 My AI Agent"
+          echo "================================="
+          echo ""
+          echo "المهمة المطلوبة:"
+          echo "$TASK"
+          echo ""
+          echo "📁 الملفات الموجودة في المشروع:"
+          find . -maxdepth 3 -type f \
+            -not -path './.git/*' \
+            | sort
+          echo ""
+          echo "✅ تم استقبال المهمة بنجاح." 
